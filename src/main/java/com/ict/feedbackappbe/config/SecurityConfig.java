@@ -19,8 +19,11 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.cors();
         http.csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/addexpense").authenticated()
-                .antMatchers( "/signup", "/login", "/emailexists", "/feedback/save").permitAll()  // Allow these endpoints without authentication
+                .antMatchers("/course/save").authenticated()
+                .antMatchers("/course/get").authenticated()
+                .antMatchers("/course/delete").authenticated()
+                .antMatchers("/feedback/save").authenticated()
+                .antMatchers( "/signup", "/login", "/emailexists").permitAll()  // Allow these endpoints without authentication
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement()

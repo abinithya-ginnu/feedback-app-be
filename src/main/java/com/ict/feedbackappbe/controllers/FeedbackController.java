@@ -1,6 +1,6 @@
 package com.ict.feedbackappbe.controllers;
 
-import com.ict.feedbackappbe.models.Feedback;
+import com.ict.feedbackappbe.models.FeedbackEntity;
 import com.ict.feedbackappbe.repository.FeedbackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,12 +19,12 @@ public class FeedbackController {
     @CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
     @PostMapping("/feedback/save")
     public ResponseEntity<Map<String, Object>> saveFeedback(@RequestHeader(name = "Authorization") String token,
-                                                            @RequestBody Feedback feedback) {
+                                                            @RequestBody FeedbackEntity feedback) {
         Map<String, Object> response = new HashMap<>();
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.isAuthenticated()) {
-                Feedback result = feedbackRepository.save(feedback);
+                feedbackRepository.save(feedback);
                 response.put("status", "success");
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
             } else {

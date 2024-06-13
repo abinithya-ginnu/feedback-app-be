@@ -1,6 +1,9 @@
 package com.ict.feedbackappbe.models;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 enum Profession {
     PARTICIPANT,
@@ -9,7 +12,7 @@ enum Profession {
 }
 @Entity
 @Table(name = "users")
-public class UserModel {
+public class UserEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -17,16 +20,22 @@ public class UserModel {
     private String email;
     private String password;
     Profession profession;
+    @JsonProperty("created_date")
+    private LocalDateTime createdDate;
+    @JsonProperty("modified_date")
+    private LocalDateTime modifiedDate;
 
-    public UserModel() {
+    public UserEntity() {
     }
 
-    public UserModel(int id, String name, String email, String password, Profession profession) {
+    public UserEntity(int id, String name, String email, String password, Profession profession, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.name = name;
         this.email = email;
         this.password = password;
         this.profession = profession;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
     }
 
     public int getId() {
@@ -67,5 +76,21 @@ public class UserModel {
 
     public void setProfession(Profession profession) {
         this.profession = profession;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(LocalDateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 }

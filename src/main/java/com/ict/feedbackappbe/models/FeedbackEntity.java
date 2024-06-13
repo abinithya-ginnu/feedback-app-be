@@ -3,10 +3,11 @@ package com.ict.feedbackappbe.models;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "feedback")
-public class Feedback {
+public class FeedbackEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
@@ -20,11 +21,15 @@ public class Feedback {
     int userId;
     @JsonProperty("course_id")
     int courseId;
+    @JsonProperty("created_date")
+    private LocalDateTime createdDate;
+    @JsonProperty("modified_date")
+    private LocalDateTime modifiedDate;
 
-    public Feedback() {
+    public FeedbackEntity() {
     }
 
-    public Feedback(int id, int q1, int q2, int q3, int q4, String q5, String q6, int userId, int courseId) {
+    public FeedbackEntity(int id, int q1, int q2, int q3, int q4, String q5, String q6, int userId, int courseId, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.q1 = q1;
         this.q2 = q2;
@@ -34,6 +39,8 @@ public class Feedback {
         this.q6 = q6;
         this.userId = userId;
         this.courseId = courseId;
+        this.createdDate = createdDate;
+        this.modifiedDate = modifiedDate;
     }
 
     public int getId() {
@@ -106,5 +113,21 @@ public class Feedback {
 
     public void setCourseId(int courseId) {
         this.courseId = courseId;
+    }
+
+    public LocalDateTime getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDateTime createdDate) {
+        this.createdDate = createdDate;
+    }
+
+    public LocalDateTime getModifiedDate() {
+        return modifiedDate;
+    }
+
+    public void setModifiedDate(LocalDateTime modifiedDate) {
+        this.modifiedDate = modifiedDate;
     }
 }

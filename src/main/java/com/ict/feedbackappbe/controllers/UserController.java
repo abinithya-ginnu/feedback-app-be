@@ -1,12 +1,13 @@
 package com.ict.feedbackappbe.controllers;
 
-import com.ict.feedbackappbe.models.UserModel;
+import com.ict.feedbackappbe.models.UserEntity;
 import com.ict.feedbackappbe.repository.UserRepository;
 import com.ict.feedbackappbe.utils.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -16,10 +17,10 @@ public class UserController {
     private UserRepository userRepository;
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/login")
-    public ResponseEntity<Map<String, Object>> login(@RequestBody UserModel user){
+    public ResponseEntity<Map<String, Object>> login(@RequestBody UserEntity user){
         Map<String, Object> response = new HashMap<>();
         try{
-            UserModel userData = userRepository.login(user.getEmail(), user.getPassword());
+            UserEntity userData = userRepository.login(user.getEmail(), user.getPassword());
             if (userData != null) {
                 // Token Generated
                 response.put("status", "success");
@@ -43,7 +44,7 @@ public class UserController {
     public ResponseEntity<Map<String, Object>> emailExists (@RequestParam String email){
         Map<String, Object> response = new HashMap<>();
         try{
-            UserModel userData = userRepository.emailExists(email);
+            UserEntity userData = userRepository.emailExists(email);
             if (userData != null){
                 response.put("status", "success");
                 response.put("code" , 200);
@@ -61,19 +62,22 @@ public class UserController {
     }
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("/signup")
-    public  ResponseEntity<Map<String, Object>> createUser(@RequestBody UserModel user){
+    public  ResponseEntity<Map<String, Object>> createUser(@RequestBody UserEntity user){
         Map<String, Object> response = new HashMap<>();
         try {
-            UserModel userData =new UserModel();
+            UserEntity userData =new UserEntity();
             userData.setName(user.getName());
             userData.setEmail(user.getEmail());
             userData.setPassword(user.getPassword());
             userData.setProfession(user.getProfession());
-            UserModel result = userRepository.save(userData);
+            userData.setCreatedDate(LocalDateTime.now());
+            userData.setModifiedDate(LocalDateTime.now());
+            UserEntity result = userRepository.save(userData);
             response.put("status", "success");
             response.put("code", 201);
             response.put("id", result.getId());
             response.put("name", result.getName());
+            response.put("profession", result.getProfession());
             response.put("token", JwtUtils.generateToken(result.getEmail()));
 ;        } catch (Exception ex) {
             response.put("status", "error");
