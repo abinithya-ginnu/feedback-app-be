@@ -26,10 +26,13 @@ public class CourseController {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (authentication.isAuthenticated()) {
-                course.setCreatedDate(LocalDateTime.now());
+                if (course.getId() == 0) {
+                    course.setCreatedDate(LocalDateTime.now());
+                }
                 course.setModifiedDate(LocalDateTime.now());
                 courseRepository.save(course);
                 response.put("status", "success");
+                response.put("code", 200);
                 return ResponseEntity.status(HttpStatus.CREATED).body(response);
             } else {
                 response.put("status", "error");
@@ -70,6 +73,31 @@ public class CourseController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
+    @GetMapping("/course/get/{id}")
+    public ResponseEntity<Map<String, Object>> getCourseDetailsById(@RequestHeader(name = "Authorization") String token,
+                                                                    @PathVariable("id") int id) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication.isAuthenticated()) {
+                Map<String,Object> details = courseRepository.getCourseDetailsById(id);
+                response.put("status", "success");
+                response.put("code", 200);
+                response.put("details", details);
+            } else {
+                response.put("status", "error");
+                response.put("message", "Token validation failed");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
+        } catch (Exception e) {
+            response.put("status", "error");
+            response.put("code", 500);
+            response.put("message", e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
     @DeleteMapping("/course/delete")
     public ResponseEntity<Map<String, Object>> deleteCourse (@RequestHeader(name = "Authorization") String token,
                                                               @RequestParam int id){
@@ -91,6 +119,30 @@ public class CourseController {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
             }
         } catch (Exception e){
+            response.put("status", "error");
+            response.put("code", 500);
+            response.put("message", e.getMessage());
+        }
+        return ResponseEntity.ok(response);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000", allowedHeaders = "*")
+    @GetMapping("/course/get/iqa")
+    public ResponseEntity<Map<String, Object>> getRecentlyCompletedCourses(@RequestHeader(name = "Authorization") String token) {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            if (authentication.isAuthenticated()) {
+                List<Map<String, Object>> courses = courseRepository.getRecentlyCompletedCoursesForIqa();
+                response.put("status", "success");
+                response.put("code", 200);
+                response.put("courses", courses);
+            } else {
+                response.put("status", "error");
+                response.put("message", "Token validation failed");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
+            }
+        } catch (Exception e) {
             response.put("status", "error");
             response.put("code", 500);
             response.put("message", e.getMessage());

@@ -21,6 +21,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/course/save").authenticated()
                 .antMatchers("/course/get").authenticated()
+                .antMatchers("/course/get/{id}").authenticated()
+                .antMatchers("/course/get/all").authenticated()
                 .antMatchers("/course/delete").authenticated()
                 .antMatchers("/feedback/save").authenticated()
                 .antMatchers( "/signup", "/login", "/emailexists").permitAll()  // Allow these endpoints without authentication

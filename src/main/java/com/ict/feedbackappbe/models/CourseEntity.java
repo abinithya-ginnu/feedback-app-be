@@ -35,7 +35,7 @@ public class CourseEntity {
     @JsonProperty("course_name")
     private String courseName;
     private String description;
-    @JsonProperty("organizational_unit")
+    @JsonProperty("organization_unit")
     private OU organizationUnit;
     @JsonProperty("training_type")
     private TrainingType trainingType;
@@ -47,6 +47,8 @@ public class CourseEntity {
     private Status status;
     @JsonProperty("feedback_score")
     private int feedbackScore;
+    @JsonProperty("batch_count")
+    private int batchCount;
     @JsonProperty("created_date")
     private LocalDateTime createdDate;
     @JsonProperty("modified_date")
@@ -55,7 +57,7 @@ public class CourseEntity {
     public CourseEntity() {
     }
 
-    public CourseEntity(int id, String courseName, String description, OU organizationUnit, TrainingType trainingType, LocalDateTime startDate, LocalDateTime endDate, int trainer, Status status, int feedbackScore, LocalDateTime createdDate, LocalDateTime modifiedDate) {
+    public CourseEntity(int id, String courseName, String description, OU organizationUnit, TrainingType trainingType, LocalDateTime startDate, LocalDateTime endDate, int trainer, Status status, int feedbackScore, int batchCount, LocalDateTime createdDate, LocalDateTime modifiedDate) {
         this.id = id;
         this.courseName = courseName;
         this.description = description;
@@ -66,6 +68,7 @@ public class CourseEntity {
         this.trainer = trainer;
         this.status = status;
         this.feedbackScore = feedbackScore;
+        this.batchCount = batchCount;
         this.createdDate = createdDate;
         this.modifiedDate = modifiedDate;
     }
@@ -164,5 +167,13 @@ public class CourseEntity {
 
     public void setModifiedDate(LocalDateTime modifiedDate) {
         this.modifiedDate = modifiedDate;
+    }
+
+    public int getBatchCount() {
+        return batchCount;
+    }
+
+    public void setBatchCount(int batchCount) {
+        this.batchCount = batchCount;
     }
 }
